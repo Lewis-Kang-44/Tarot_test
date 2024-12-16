@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>타로점</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background: url('https://example.com/tarot-background.jpg') no-repeat center center/cover;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1;
+        }
+        .message-box {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #fff;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            z-index: 2;
+        }
+        .button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: gold;
+            color: black;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .hidden {
+            display: none;
+        }
+        .card {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(0deg);
+            width: 100px;
+            height: 150px;
+            background: url('https://example.com/tarot-back.jpg') no-repeat center center/cover;
+            animation: shuffle 3s linear;
+        }
+        @keyframes shuffle {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            25% { transform: translate(-45%, -45%) rotate(10deg); }
+            50% { transform: translate(-50%, -50%) rotate(-10deg); }
+            75% { transform: translate(-55%, -55%) rotate(5deg); }
+            100% { transform: translate(-50%, -50%) rotate(0deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="overlay"></div>
+    <div class="message-box" id="messages">
+        <p id="message">안녕하세요, 운세 컨시어지입니다.</p>
+    </div>
+    <div class="card hidden" id="shuffleAnimation"></div>
+    <div class="message-box hidden" id="resultBox">
+        <h2 id="resultTitle">현재 당신의 상황</h2>
+        <img id="resultImage" src="" alt="타로카드" style="width: 100px; height: 150px;">
+        <p id="resultText"></p>
+        <button class="button" id="solutionButton">해결방법 보기</button>
+    </div>
+    <div class="message-box hidden" id="solutionBox">
+        <h2>해결 방향</h2>
+        <img id="solutionImage" src="" alt="타로카드" style="width: 100px; height: 150px;">
+        <p id="solutionText"></p>
+    </div>
+
+    <script>
+        const messages = [
+            "안녕하세요, 운세 컨시어지입니다.",
+            "어떤 고민이 있나요?",
+            "마음속으로 질문을 떠올려보세요"
+        ];
+        const tarotCards = [
+            { image: 'https://example.com/card1.jpg', meaning: '새로운 시작이 다가오고 있습니다.' },
+            { image: 'https://example.com/card2.jpg', meaning: '인내심을 가지세요. 좋은 결과가 올 것입니다.' },
+            { image: 'https://example.com/card3.jpg', meaning: '변화를 받아들이는 것이 중요합니다.' }
+        ];
+
+        let currentMessageIndex = 0;
+        const messageBox = document.getElementById('messages');
+        const messageElement = document.getElementById('message');
+        const shuffleAnimation = document.getElementById('shuffleAnimation');
+        const resultBox = document.getElementById('resultBox');
+        const solutionBox = document.getElementById('solutionBox');
+
+        const resultImage = document.getElementById('resultImage');
+        const resultText = document.getElementById('resultText');
+        const solutionImage = document.getElementById('solutionImage');
+        const solutionText = document.getElementById('solutionText');
+
+        function showNextMessage() {
+            if (currentMessageIndex < messages.length) {
+                messageElement.textContent = messages[currentMessageIndex];
+                currentMessageIndex++;
+                setTimeout(showNextMessage, 2000);
+            } else {
+                messageBox.classList.add('hidden');
+                startTarotShuffle();
+            }
+        }
+
+        function startTarotShuffle() {
+            shuffleAnimation.classList.remove('hidden');
+
+            setTimeout(() => {
+                shuffleAnimation.classList.add('hidden');
+                resultBox.classList.remove('hidden');
+
+                const randomCard = tarotCards[Math.floor(Math.random() * tarotCards.length)];
+                resultImage.src = randomCard.image;
+                resultText.textContent = randomCard.meaning;
+            }, 3000);
+        }
+
+        document.getElementById('solutionButton').addEventListener('click', () => {
+            resultBox.classList.add('hidden');
+            solutionBox.classList.remove('hidden');
+
+            const randomCard = tarotCards[Math.floor(Math.random() * tarotCards.length)];
+            solutionImage.src = randomCard.image;
+            solutionText.textContent = randomCard.meaning;
+        });
+
+        showNextMessage();
+    </script>
+</body>
+</html>
